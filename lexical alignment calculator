@@ -1,0 +1,59 @@
+from collections import Counter
+
+def lexical_alignment(person1_text, person2_text):
+    # Tokenize the words for both people
+    person1_words = person1_text.lower().split()
+    person2_words = person2_text.lower().split()
+    
+    # Count word frequencies for both people
+    person1_counter = Counter(person1_words)
+    person2_counter = Counter(person2_words)
+    
+    # Find the common words and their frequencies
+    common_words = person1_counter & person2_counter
+    
+    # Sum the total frequency of common words
+    total_common_word_freq = sum((common_words[word] * 2) for word in common_words)
+    
+    # Calculate total words spoken by both speakers
+    total_words_person1 = len(person1_words)
+    total_words_person2 = len(person2_words)
+    total_words_spoken = total_words_person1 + total_words_person2
+    
+    # Calculate lexical alignment percentage
+    alignment_percentage = (total_common_word_freq / total_words_spoken) * 100 if total_words_spoken > 0 else 0
+    
+    return total_words_person1, total_words_person2, total_words_spoken, total_common_word_freq, alignment_percentage
+
+# Input conversation
+print("Enter the conversation (press Enter twice to finish):")
+person1_lines = []
+person2_lines = []
+
+# Collect lines from both speakers
+while True:
+    line = input("Person 1: ")
+    if line == "":
+        break
+    person1_lines.append(line)
+
+while True:
+    line = input("Person 2: ")
+    if line == "":
+        break
+    person2_lines.append(line)
+
+# Join the lines into single strings for each person
+person1_text = "\n".join(person1_lines)
+person2_text = "\n".join(person2_lines)
+
+# Call the lexical alignment function
+(total_words_person1, total_words_person2, total_words_spoken, 
+ total_common_word_freq, alignment_percentage) = lexical_alignment(person1_text, person2_text)
+
+# Print the results
+print(f"\nTotal number of words used by Person 1: {total_words_person1}")
+print(f"Total number of words used by Person 2: {total_words_person2}")
+print(f"Total number of words used in conversation: {total_words_spoken}")
+print(f"Total number of same words used (with frequency): {total_common_word_freq}")
+print(f"Lexical alignment percentage: {alignment_percentage:.2f}%")
